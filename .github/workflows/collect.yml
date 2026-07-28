@@ -1,0 +1,110 @@
+# 技術ニュース収集 + GitHub Pages デプロイ ワークフロー
+#
+# スケジュール: 毎朝 JST 8:00 (UTC 23:00) に自動実行
+# 手動実行:    GitHub の Actions タブから "Run workflow" で任意のタイミングで実行可能
+#
+# 必要な設定 (リポジトリの Settings > Secrets and variables > Actions):
+#   - 特になし (Phase 1 は無料・API キー不要)
+#
+# GitHub Pages の設定 (Settings > Pages):
+#   - Source: GitHub Actions を選択
+
+name: Collect & Deploy
+
+on:
+  schedule:
+    # UTC 23:00 = JST 08:00
+    - cron: "0 23 * * *"
+  # 手動トリガー（テスト・緊急実行用）
+  workflow_dispatch:
+
+# GitHub Pages へのデプロイに必要な権限
+permissions:
+  contents: write   # data/ への自動コミット用
+  pages: write      # GitHub Pages デプロイ用
+  id-token: write   # OIDC トークン（Pages デプロイに必要）
+
+jobs:
+  # ----------------------------------------------------------------
+  # Job 1: ニュース収集 → Markdown 保存 → Git コミット
+  # ----------------------------------------------------------------
+  collect:
+    name: Collect news articles
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 自動コミット用に fetch-depth を 0 にする
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run collector
+        run: npm run collect
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet data/ || echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push new articles
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore: collect articles $(date +'%Y-%m-%d')"
+          git push
+
+  # ----------------------------------------------------------------
+  # Job 2: Astro ビルド → GitHub Pages デプロイ
+  # collect ジョブが成功した後に実行する
+  # ----------------------------------------------------------------
+  deploy:
+    name: Build and deploy site
+    needs: collect
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # collect ジョブのコミットを含めるために pull する
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build:site
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

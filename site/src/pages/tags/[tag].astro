@@ -1,0 +1,58 @@
+---
+/**
+ * タグ別記事一覧ページ
+ * /tags/[tag] でアクセスする
+ * getStaticPaths でビルド時に全タグ分のページを生成する
+ */
+import Base from "../../layouts/Base.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import type { ArticleIndex } from "../../../../src/types/index.js";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// ビルド時に全タグ分のパスを生成する
+export async function getStaticPaths() {
+  let indexData: ArticleIndex;
+  try {
+    const raw = readFileSync(resolve(process.cwd(), "../data/index.json"), "utf-8");
+    indexData = JSON.parse(raw) as ArticleIndex;
+  } catch {
+    return [];
+  }
+
+  // 全ユニークタグを収集
+  const allTags = [...new Set(indexData.articles.flatMap((a) => a.tags))];
+
+  return allTags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      articles: indexData.articles.filter((a) => a.tags.includes(tag)),
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  articles: ArticleIndex["articles"];
+}
+
+const { tag, articles } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title={`#${tag} — Tech News KB`}>
+  <div class="mb-6 flex items-center gap-3">
+    <a href={`${base}/tags`} class="text-sm text-gray-400 hover:text-gray-600">← タグ一覧</a>
+    <h1 class="text-2xl font-bold text-gray-900">#{tag}</h1>
+    <span class="rounded-full bg-gray-100 px-2 py-1 text-sm text-gray-500">
+      {articles.length} 件
+    </span>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {articles.map((article) => (
+      <ArticleCard {...article} />
+    ))}
+  </div>
+</Base>

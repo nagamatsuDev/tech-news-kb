@@ -1,0 +1,126 @@
+---
+/**
+ * トップページ
+ * index.json を読み込んで最新記事一覧を表示する
+ * タグフィルターとソースフィルターをクライアントサイド JS で実装する
+ */
+import Base from "../layouts/Base.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import type { ArticleIndex } from "../../../src/types/index.js";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// ビルド時に data/index.json を読み込む
+let indexData: ArticleIndex;
+try {
+  const raw = readFileSync(resolve(process.cwd(), "../data/index.json"), "utf-8");
+  indexData = JSON.parse(raw) as ArticleIndex;
+} catch {
+  // data/index.json がまだ存在しない場合（初回ビルド）
+  indexData = { updatedAt: new Date().toISOString(), totalCount: 0, articles: [] };
+}
+
+// 最新 100 件を表示（超過分はタグページや検索から辿れる）
+const articles = indexData.articles.slice(0, 100);
+
+// タグ集計（上位 20 件）
+const tagCounts = articles
+  .flatMap((a) => a.tags)
+  .reduce<Record<string, number>>((acc, t) => {
+    acc[t] = (acc[t] ?? 0) + 1;
+    return acc;
+  }, {});
+const topTags = Object.entries(tagCounts)
+  .sort(([, a], [, b]) => b - a)
+  .slice(0, 20);
+
+const base = import.meta.env.BASE_URL;
+const updatedAt = new Date(indexData.updatedAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+---
+
+<Base title="Tech News KB" description="技術ニュース知識ベース — RSS・HN・GitHub Trending を毎朝自動収集">
+
+  <!-- ヒーロー -->
+  <div class="mb-8 text-center">
+    <h1 class="mb-2 text-3xl font-bold text-gray-900">Tech News KB</h1>
+    <p class="text-gray-500">
+      RSS · Hacker News · GitHub Trending を毎朝自動収集
+    </p>
+    <p class="mt-1 text-xs text-gray-400">
+      最終更新: {updatedAt} — 全 {indexData.totalCount} 件
+    </p>
+  </div>
+
+  <!-- タグフィルター -->
+  <div class="mb-6">
+    <div class="mb-2 text-sm font-medium text-gray-600">タグで絞り込む</div>
+    <div class="flex flex-wrap gap-2">
+      <button
+        data-filter="all"
+        class="filter-btn active rounded-full border border-brand-500 bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700"
+      >
+        すべて ({articles.length})
+      </button>
+      {topTags.map(([tag, count]) => (
+        <button
+          data-filter={tag}
+          class="filter-btn rounded-full border border-gray-200 bg-white px-3 py-1 text-sm text-gray-600 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+        >
+          #{tag} ({count})
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- 記事グリッド -->
+  <div id="article-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {articles.map((article) => (
+      <div
+        class="article-item"
+        data-tags={article.tags.join(",")}
+        data-source={article.source}
+      >
+        <ArticleCard {...article} />
+      </div>
+    ))}
+  </div>
+
+  {articles.length === 0 && (
+    <div class="py-20 text-center text-gray-400">
+      <p class="text-5xl">📭</p>
+      <p class="mt-4 text-lg">まだ記事が収集されていません</p>
+      <p class="mt-1 text-sm">GitHub Actions を実行すると記事が表示されます</p>
+    </div>
+  )}
+
+</Base>
+
+<script>
+  // クライアントサイドのタグフィルタリング
+  const btns = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const items = document.querySelectorAll<HTMLDivElement>(".article-item");
+
+  btns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter ?? "all";
+
+      // ボタンのアクティブ状態を更新
+      btns.forEach((b) => {
+        b.classList.toggle("active", b === btn);
+        b.classList.toggle("border-brand-500", b === btn);
+        b.classList.toggle("bg-brand-50", b === btn);
+        b.classList.toggle("text-brand-700", b === btn);
+        b.classList.toggle("border-gray-200", b !== btn);
+        b.classList.toggle("bg-white", b !== btn);
+        b.classList.toggle("text-gray-600", b !== btn);
+      });
+
+      // 記事の表示・非表示を切り替え
+      items.forEach((item) => {
+        const tags = (item.dataset.tags ?? "").split(",");
+        const visible = filter === "all" || tags.includes(filter);
+        item.style.display = visible ? "" : "none";
+      });
+    });
+  });
+</script>

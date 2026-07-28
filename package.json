@@ -1,0 +1,21 @@
+{
+  "name": "tech-news-kb",
+  "version": "1.0.0",
+  "description": "Tech news knowledge base collector",
+  "type": "module",
+  "scripts": {
+    "collect": "tsx src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "build:site": "cd site && npm ci && npm run build",
+    "dev:site": "cd site && npm run dev"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

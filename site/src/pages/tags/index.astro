@@ -1,0 +1,48 @@
+---
+/**
+ * タグ一覧ページ
+ * 全タグと記事数を表示する
+ */
+import Base from "../../layouts/Base.astro";
+import type { ArticleIndex } from "../../../../src/types/index.js";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+let indexData: ArticleIndex;
+try {
+  const raw = readFileSync(resolve(process.cwd(), "../data/index.json"), "utf-8");
+  indexData = JSON.parse(raw) as ArticleIndex;
+} catch {
+  indexData = { updatedAt: new Date().toISOString(), totalCount: 0, articles: [] };
+}
+
+// タグ集計（記事数の降順）
+const tagCounts = indexData.articles
+  .flatMap((a) => a.tags)
+  .reduce<Record<string, number>>((acc, t) => {
+    acc[t] = (acc[t] ?? 0) + 1;
+    return acc;
+  }, {});
+const sortedTags = Object.entries(tagCounts).sort(([, a], [, b]) => b - a);
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="タグ一覧 — Tech News KB">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">タグ一覧</h1>
+    <p class="mt-1 text-sm text-gray-500">{sortedTags.length} 種類のタグ</p>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    {sortedTags.map(([tag, count]) => (
+      <a
+        href={`${base}/tags/${tag}`}
+        class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm hover:border-brand-300 hover:shadow-md"
+      >
+        <span class="font-medium text-gray-800">#{tag}</span>
+        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">{count}</span>
+      </a>
+    ))}
+  </div>
+</Base>
