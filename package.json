@@ -7,7 +7,7 @@
     "collect": "tsx src/main.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "build:site": "cd site && npm install && npm run build",
+    "build:site": "cd site && npm ci && npm run build",
     "dev:site": "cd site && npm run dev"
   },
   "dependencies": {
