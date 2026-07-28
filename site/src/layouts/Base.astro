@@ -91,8 +91,9 @@ const base = import.meta.env.BASE_URL;
       // dev モードでは存在しないため、エラーを握りつぶす
       async function initPagefind() {
         try {
+          const pagefindScriptPath = `${import.meta.env.BASE_URL}pagefind/pagefind-ui.js`;
           // @ts-ignore
-          const { PagefindUI } = await import("/tech-news-kb/pagefind/pagefind-ui.js");
+          const { PagefindUI } = await import(/* @vite-ignore */ pagefindScriptPath);
           new PagefindUI({
             element: "#pagefind-ui",
             showSubResults: true,
