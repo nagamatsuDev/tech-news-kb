@@ -14,15 +14,15 @@ name: Collect & Deploy
 on:
   schedule:
     # UTC 23:00 = JST 08:00
-    - cron: "0 23 * * *"
+    - cron: '0 23 * * *'
   # 手動トリガー（テスト・緊急実行用）
   workflow_dispatch:
 
 # GitHub Pages へのデプロイに必要な権限
 permissions:
-  contents: write   # data/ への自動コミット用
-  pages: write      # GitHub Pages デプロイ用
-  id-token: write   # OIDC トークン（Pages デプロイに必要）
+  contents: write # data/ への自動コミット用
+  pages: write # GitHub Pages デプロイ用
+  id-token: write # OIDC トークン（Pages デプロイに必要）
 
 jobs:
   # ----------------------------------------------------------------
@@ -42,11 +42,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run collector
         run: npm run collect
@@ -88,11 +88,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Astro site
         run: npm run build:site
