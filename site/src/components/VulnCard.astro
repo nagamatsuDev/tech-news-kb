@@ -1,0 +1,102 @@
+---
+/**
+ * 脆弱性カード（ボード用）
+ * 照合に使う情報は data-match に JSON で持たせ、ブラウザ側で設定と照合する
+ * 外部由来の文字列はすべて Astro の自動エスケープで出力する（set:html は使わない）
+ */
+import type { Vulnerability } from "../../../src/types/vuln.js";
+import { safeUrl } from "../../../src/shared/sanitize.js";
+import SeverityBadge from "./SeverityBadge.astro";
+import { fmtDate } from "../lib/vulns";
+
+interface Props {
+  v: Vulnerability;
+}
+const { v } = Astro.props;
+const match = { os: v.os, languages: v.languages, products: v.products, title: v.title, packages: v.packages };
+// 出力直前にもう一度検証
+const links = v.links.map((l) => ({ ...l, safe: safeUrl(l.url) })).filter((l) => l.safe);
+const title = v.titleJa || v.title;
+---
+
+<article
+  class="vuln-card group rounded-lg border border-gray-200 bg-white p-3 text-sm shadow-sm"
+  draggable="true"
+  data-uuid={v.uuid}
+  data-ids={v.ids.join(" ")}
+  data-sev={v.severity}
+  data-kev={v.kev ? "1" : ""}
+  data-cvss={v.cvssScore ?? 0}
+  data-text={[...v.ids, v.title, v.titleJa ?? "", ...v.products, ...v.packages.map((p) => p.name)].join(" ").toLowerCase()}
+  data-match={JSON.stringify(match)}
+>
+  <div class="flex flex-wrap items-center gap-1">
+    <SeverityBadge severity={v.severity} score={v.cvssScore} />
+    {v.kev && (
+      <span class="rounded bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-700" title={v.kev.requiredAction}>
+        🔥 悪用確認{v.kev.ransomware ? "・ランサムウェア" : ""}
+      </span>
+    )}
+    <span class="match-badge hidden rounded px-1.5 py-0.5 text-xs font-semibold"></span>
+    <span class="gone-badge hidden rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">依存から外れた</span>
+    <time class="ml-auto text-xs text-gray-400" datetime={v.publishedAt}>{fmtDate(v.publishedAt)}</time>
+  </div>
+
+  <p class="mt-1.5 font-medium leading-snug text-gray-900">{title}</p>
+  <p class="match-reason mt-0.5 hidden text-xs text-red-700"></p>
+
+  <div class="mt-1 flex flex-wrap gap-1">
+    {v.os.map((o) => <span class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-700">{o}</span>)}
+    {v.languages.map((l) => <span class="rounded bg-violet-50 px-1.5 py-0.5 text-xs text-violet-700">{l}</span>)}
+  </div>
+
+  <details class="mt-2">
+    <summary class="cursor-pointer select-none text-xs text-gray-500 hover:text-gray-700">
+      <span class="font-mono">{v.ids[0]}</span> の詳細
+    </summary>
+    {v.summaryJa && (
+      <div class="mt-2">
+        <p class="text-xs text-gray-400">
+          {v.translation === "jvn" ? "日本語（JVN iPedia）" : "日本語（機械翻訳）"}
+        </p>
+        <p class="whitespace-pre-line text-gray-700">{v.summaryJa}</p>
+      </div>
+    )}
+    <div class="mt-2">
+      <p class="text-xs text-gray-400">原文</p>
+      <p class="whitespace-pre-line text-gray-600">{v.summary || v.title}</p>
+    </div>
+    {v.packages.length > 0 && (
+      <ul class="mt-2 space-y-0.5 text-xs text-gray-600">
+        {v.packages.slice(0, 8).map((p) => (
+          <li>
+            <span class="font-mono">{p.ecosystem}/{p.name}</span> {p.vulnerableRange}
+            {p.fixedVersion && <span class="text-emerald-700"> → {p.fixedVersion}</span>}
+          </li>
+        ))}
+      </ul>
+    )}
+    {links.length > 0 && (
+      <ul class="mt-2 space-y-0.5 text-xs">
+        {links.map((l) => (
+          <li>
+            <a href={l.safe!.href} target="_blank" rel="noopener noreferrer nofollow" referrerpolicy="no-referrer" class="text-brand-700 hover:underline">
+              {l.label}
+            </a>
+            <span class="text-gray-400"> — {l.safe!.host}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p class="mt-2 font-mono text-[10px] text-gray-300">{v.ids.join(" · ")} · {v.uuid}</p>
+  </details>
+
+  <label class="mt-2 flex items-center gap-1 text-xs text-gray-500">
+    ステータス
+    <select class="status-select rounded border border-gray-200 bg-white px-1 py-0.5 text-xs">
+      <option value="todo">未対応</option>
+      <option value="doing">対応中</option>
+      <option value="done">対応完了</option>
+    </select>
+  </label>
+</article>

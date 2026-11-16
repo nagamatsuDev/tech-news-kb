@@ -1,0 +1,122 @@
+---
+/**
+ * 週ページ /weeks/2026-W47
+ *   タブ 1: 今週のボード（未対応 / 対応中 / 対応完了）
+ *   タブ 2: 過去の未対応（依存ファイルを OSV.dev で照合）
+ * ステータス・設定・依存はすべてブラウザの localStorage（lib/client/*）
+ */
+import Base from "../../layouts/Base.astro";
+import VulnCard from "../../components/VulnCard.astro";
+import { SEVERITIES, SEV_STYLE, allWeeks, loadWeek } from "../../lib/vulns";
+import { weekRangeLabel } from "../../../../src/shared/week.js";
+import { sortByPriority } from "../../../../src/processors/merge.js";
+
+export function getStaticPaths() {
+  const weeks = allWeeks();
+  return weeks.map((week, i) => ({
+    params: { week },
+    props: { week, prev: weeks[i - 1], next: weeks[i + 1], latest: weeks[weeks.length - 1] },
+  }));
+}
+
+interface Props {
+  week: string;
+  prev?: string;
+  next?: string;
+  latest: string;
+}
+const { week, prev, next, latest } = Astro.props;
+const vulns = sortByPriority(loadWeek(week));
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const sevCounts = Object.fromEntries(SEVERITIES.map((s) => [s, vulns.filter((v) => v.severity === s).length]));
+const kevCount = vulns.filter((v) => v.kev).length;
+const columns = [
+  { status: "todo", label: "未対応" },
+  { status: "doing", label: "対応中" },
+  { status: "done", label: "対応完了" },
+] as const;
+---
+
+<Base title={`${week} — Vuln KB`}>
+  <nav slot="header" class="flex items-center gap-2 text-sm" aria-label="週の切り替え">
+    {prev ? (
+      <a href={`${base}/weeks/${prev}`} class="rounded-lg border border-gray-200 px-2.5 py-1 hover:bg-gray-50">‹ 前の週</a>
+    ) : (
+      <span class="rounded-lg border border-gray-100 px-2.5 py-1 text-gray-300">‹ 前の週</span>
+    )}
+    <span class="whitespace-nowrap px-1 font-semibold tabular-nums">
+      {week}<span class="ml-1 hidden font-normal text-gray-500 sm:inline">（{weekRangeLabel(week)}）</span>
+    </span>
+    {next ? (
+      <a href={`${base}/weeks/${next}`} class="rounded-lg border border-gray-200 px-2.5 py-1 hover:bg-gray-50">次の週 ›</a>
+    ) : (
+      <span class="rounded-lg border border-gray-100 px-2.5 py-1 text-gray-300">次の週 ›</span>
+    )}
+    {week !== latest && (
+      <a href={`${base}/weeks/${latest}`} class="hidden text-xs text-brand-600 hover:underline md:inline">今週へ</a>
+    )}
+  </nav>
+
+  <!-- タブ -->
+  <div class="mb-4 flex gap-6 border-b border-gray-200 text-sm" role="tablist">
+    <button type="button" data-tab="board" role="tab" aria-selected="true" class="-mb-px border-b-2 border-gray-900 py-2 font-medium text-gray-900">
+      {week === latest ? "今週" : "この週"}のボード（{vulns.length}）
+    </button>
+    <button type="button" data-tab="past" role="tab" aria-selected="false" class="-mb-px border-b-2 border-transparent py-2 font-medium text-gray-500">
+      過去の未対応<span id="past-count"></span>
+    </button>
+  </div>
+
+  <!-- ボード -->
+  <section data-panel="board">
+    <div class="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs">
+      <label class="flex items-center gap-1 font-medium text-gray-700">
+        <input id="f-matched" type="checkbox" class="rounded border-gray-300" /> 設定に一致のみ
+      </label>
+      <span class="mx-1 h-4 w-px bg-gray-200"></span>
+      {SEVERITIES.map((s) => (
+        <button type="button" data-sev-filter={s} class="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-gray-700">
+          <span class={`mr-1 inline-block h-2 w-2 rounded-full ${SEV_STYLE[s].dot}`}></span>{SEV_STYLE[s].label}
+          <span class="text-gray-400">{sevCounts[s]}</span>
+        </button>
+      ))}
+      <label class="flex items-center gap-1 text-red-700">
+        <input id="f-kev" type="checkbox" class="rounded border-gray-300" /> 🔥 KEV のみ（{kevCount}）
+      </label>
+      <input id="f-q" type="search" placeholder="CVE・製品名・パッケージ名" class="ml-auto w-full rounded-lg border border-gray-200 px-3 py-1.5 sm:w-64" />
+    </div>
+
+    {vulns.length === 0 ? (
+      <p class="rounded-xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-500">この週に収集した脆弱性はまだありません。</p>
+    ) : (
+      <div class="grid gap-4 md:grid-cols-3">
+        {columns.map((c) => (
+          <div data-column={c.status} class="flex min-h-[200px] flex-col rounded-xl bg-gray-100 p-3 transition">
+            <div class="mb-2 flex items-center justify-between text-sm font-semibold text-gray-700">
+              <span>{c.label}</span>
+              <span class="column-count rounded-full bg-white px-2 text-xs text-gray-500">{c.status === "todo" ? vulns.length : 0}</span>
+            </div>
+            <div class="column-body flex flex-1 flex-col gap-2">
+              {c.status === "todo" && vulns.map((v) => <VulnCard v={v} />)}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <!-- 過去の未対応 -->
+  <section data-panel="past" class="hidden">
+    <div class="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs text-gray-600">
+      <span>読み込んだ依存ファイルを OSV.dev で照合し、対応完了にしていないものを表示します（結果は 1 日キャッシュ）。</span>
+      <label class="flex items-center gap-1"><input id="past-show-done" type="checkbox" class="rounded border-gray-300" /> 対応完了も表示</label>
+      <button type="button" id="past-refresh" class="ml-auto rounded-lg border border-gray-200 px-3 py-1 hover:bg-gray-50">再照合</button>
+    </div>
+    <p id="past-message" class="mb-3 text-sm text-gray-500"></p>
+    <div id="past-list" class="grid gap-2 md:grid-cols-2"></div>
+  </section>
+</Base>
+
+<script>
+  import "../../lib/client/board-ui";
+</script>

@@ -17,4 +17,11 @@ export default defineConfig({
     // GitHub Pages 向けに assets をまとめる
     assets: "_assets",
   },
+
+  vite: {
+    // スクリプトをページ内にインライン化しない（CSP の script-src 'self' を守るため）
+    build: { assetsInlineLimit: 0 },
+    // ../src/shared などリポジトリ直下の共通コードを dev サーバーでも読めるようにする
+    server: { fs: { allow: [".."] } },
+  },
 });

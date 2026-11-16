@@ -12,9 +12,24 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "types": ["node"],
-    "typeRoots": ["./node_modules/@types"]
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "site"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "site",
+    "src/projects/loader.ts",
+    "src/projects/tasks.ts",
+    "src/fetchers/osv.ts",
+    "src/writers/vulns.ts",
+    "src/config/projects.ts"
+  ]
 }

@@ -1,10 +1,12 @@
 {
   "name": "tech-news-kb",
   "version": "1.0.0",
-  "description": "Tech news knowledge base collector",
+  "description": "Vulnerability knowledge base (NVD / GitHub Advisory / CISA KEV / JVN) with weekly board",
   "type": "module",
   "scripts": {
     "collect": "tsx src/main.ts",
+    "collect:news": "tsx src/news-main.ts",
+    "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
     "build:site": "cd site && npm install && npm run build",
@@ -17,5 +19,8 @@
     "@types/node": "^20.11.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^3.7.0"
   }
 }
