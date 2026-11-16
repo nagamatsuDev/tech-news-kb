@@ -1,0 +1,26 @@
+{
+  "updatedAt": "2026-11-16T07:36:52.495Z",
+  "weeks": [
+    {
+      "week": "2026-W45",
+      "count": 24,
+      "critical": 5,
+      "high": 19,
+      "kev": 1
+    },
+    {
+      "week": "2026-W46",
+      "count": 800,
+      "critical": 107,
+      "high": 667,
+      "kev": 1
+    },
+    {
+      "week": "2026-W47",
+      "count": 36,
+      "critical": 4,
+      "high": 32,
+      "kev": 1
+    }
+  ]
+}
