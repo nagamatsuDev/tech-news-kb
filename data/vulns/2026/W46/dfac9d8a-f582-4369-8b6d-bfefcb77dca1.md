@@ -14,18 +14,14 @@
   "languages": [
     "PHP"
   ],
-  "products": [],
+  "products": [
+    "open-emr openemr"
+  ],
   "packages": [],
   "sources": [
     "nvd"
   ],
   "links": [
-    {
-      "kind": "vendor",
-      "url": "https://github.com/openemr/openemr/security/advisories/GHSA-mf55-7h68-r2rp",
-      "host": "github.com",
-      "label": "ベンダー発表 (github.com)"
-    },
     {
       "kind": "detail",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-126481",
@@ -40,7 +36,7 @@
     }
   ],
   "publishedAt": "2026-11-13T10:17:57.893Z",
-  "updatedAt": "2026-11-13T19:19:24.300Z",
+  "updatedAt": "2026-11-16T18:51:51.990Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W46"
 }
@@ -59,6 +55,5 @@ OpenEMR before 8\.5\.0 contains a path traversal vulnerability in era\_payments\
 
 ## リンク
 
-- [ベンダー発表 \(github\.com\)](<https://github.com/openemr/openemr/security/advisories/GHSA-mf55-7h68-r2rp>)
 - [NVD CVE\-2026\-126481](<https://nvd.nist.gov/vuln/detail/CVE-2026-126481>)
 - [www\.vulncheck\.com](<https://www.vulncheck.com/advisories/openemr-before-8.5.0-path-traversal-via-era-835-file-upload>)

@@ -6,7 +6,7 @@
   ],
   "title": "Use after free in Frames in Google Chrome prior to 157.0.8103.78 allowed a remote attacker to execute arbitrary code inside the sandbox v...",
   "summary": "Use after free in Frames in Google Chrome prior to 157.0.8103.78 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
-  "translation": "none",
+  "translation": "machine",
   "severity": "high",
   "cvssScore": 8.8,
   "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
@@ -42,11 +42,12 @@
   "publishedAt": "2026-11-11T23:17:15.517Z",
   "updatedAt": "2026-11-13T15:48:31.857Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
-  "week": "2026-W46"
+  "week": "2026-W46",
+  "titleJa": "Google Chromeで無料以降の使用は、157.0.8103.78以前のもの。リモート攻撃者は、サンドボックス内からHgiXraryコードを実行することができる。"
 }
 ---
 
-# Use after free in Frames in Google Chrome prior to 157\.0\.8103\.78 allowed a remote attacker to execute arbitrary code inside the sandbox v\.\.\.
+# Google Chromeで無料以降の使用は、157\.0\.8103\.78以前のもの。リモート攻撃者は、サンドボックス内からHgiXraryコードを実行することができる。
 
 - **ID**: CVE\-2026\-126869
 - **危険度**: High（重要） (CVSS 8.8)

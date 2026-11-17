@@ -4,8 +4,8 @@
   "ids": [
     "CVE-2026-105544"
   ],
-  "title": "Improper access control in .NET allows an authorized attacker to elevate privileges locally.",
-  "summary": "Improper access control in .NET allows an authorized attacker to elevate privileges locally.",
+  "title": "Improper access control in .NET VSTest CLI allows an authorized attacker to elevate privileges locally.",
+  "summary": "Improper access control in .NET VSTest CLI allows an authorized attacker to elevate privileges locally.",
   "translation": "none",
   "severity": "high",
   "cvssScore": 7.5,
@@ -34,13 +34,13 @@
     }
   ],
   "publishedAt": "2026-11-10T19:17:56.330Z",
-  "updatedAt": "2026-11-13T19:17:44.807Z",
+  "updatedAt": "2026-11-16T20:17:33.087Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W46"
 }
 ---
 
-# Improper access control in \.NET allows an authorized attacker to elevate privileges locally\.
+# Improper access control in \.NET VSTest CLI allows an authorized attacker to elevate privileges locally\.
 
 - **ID**: CVE\-2026\-105544
 - **危険度**: High（重要） (CVSS 7.5)
@@ -49,7 +49,7 @@
 
 ## 原文
 
-Improper access control in \.NET allows an authorized attacker to elevate privileges locally\.
+Improper access control in \.NET VSTest CLI allows an authorized attacker to elevate privileges locally\.
 
 ## リンク
 

@@ -6,7 +6,7 @@
   ],
   "title": "Off-by-one error in V8 in Google Chrome prior to 157.0.8103.78 allowed a remote attacker to potentially execute arbitrary code inside the...",
   "summary": "Off-by-one error in V8 in Google Chrome prior to 157.0.8103.78 allowed a remote attacker to potentially execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
-  "translation": "none",
+  "translation": "machine",
   "severity": "high",
   "cvssScore": 8.8,
   "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
@@ -42,11 +42,12 @@
   "publishedAt": "2026-11-11T23:17:18.180Z",
   "updatedAt": "2026-11-13T15:23:30.867Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
-  "week": "2026-W46"
+  "week": "2026-W46",
+  "titleJa": "Google ChromeのV8では、157.0.8103.78以前のオフ・バイ・ワンエラーにより、リモート攻撃者が."
 }
 ---
 
-# Off\-by\-one error in V8 in Google Chrome prior to 157\.0\.8103\.78 allowed a remote attacker to potentially execute arbitrary code inside the\.\.\.
+# Google ChromeのV8では、157\.0\.8103\.78以前のオフ・バイ・ワンエラーにより、リモート攻撃者が\.
 
 - **ID**: CVE\-2026\-126889
 - **危険度**: High（重要） (CVSS 8.8)

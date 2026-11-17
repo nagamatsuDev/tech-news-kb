@@ -12,27 +12,29 @@
   "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
   "os": [],
   "languages": [],
-  "products": [],
+  "products": [
+    "ibm contextforge"
+  ],
   "packages": [],
   "sources": [
     "nvd"
   ],
   "links": [
     {
+      "kind": "vendor",
+      "url": "https://www.ibm.com/support/pages/node/7296489",
+      "host": "www.ibm.com",
+      "label": "ベンダー発表 (www.ibm.com)"
+    },
+    {
       "kind": "detail",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-110278",
       "host": "nvd.nist.gov",
       "label": "NVD CVE-2026-110278"
-    },
-    {
-      "kind": "reference",
-      "url": "https://www.ibm.com/support/pages/node/7296489",
-      "host": "www.ibm.com",
-      "label": "www.ibm.com"
     }
   ],
   "publishedAt": "2026-11-13T22:17:20.900Z",
-  "updatedAt": "2026-11-13T22:17:21.000Z",
+  "updatedAt": "2026-11-16T20:17:48.387Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W46"
 }
@@ -50,5 +52,5 @@ IBM ContextForge MCP Gateway 1\.0\.0 through 1\.1\.0 could allow an attacker to 
 
 ## リンク
 
+- [ベンダー発表 \(www\.ibm\.com\)](<https://www.ibm.com/support/pages/node/7296489>)
 - [NVD CVE\-2026\-110278](<https://nvd.nist.gov/vuln/detail/CVE-2026-110278>)
-- [www\.ibm\.com](<https://www.ibm.com/support/pages/node/7296489>)
