@@ -1,0 +1,54 @@
+---
+{
+  "uuid": "f37aeac9-f741-4f1b-9a2e-bfe8f93efa14",
+  "ids": [
+    "CVE-2026-127422"
+  ],
+  "title": "Vulnerability in the Oracle VM VirtualBox product of Oracle Virtualization (component: Core).",
+  "summary": "Vulnerability in the Oracle VM VirtualBox product of Oracle Virtualization (component: Core).   The supported version that is affected is 7.2.22. Easily exploitable vulnerability allows unauthenticated attacker with logon to the infrastructure where Oracle VM VirtualBox executes to compromise Oracle VM VirtualBox.  Successful attacks require human interaction from a person other than the attacker. Successful attacks of this vulnerability can result in  unauthorized creation, deletion or modification access to critical data or all Oracle VM VirtualBox accessible data and unauthorized ability to cause a hang or frequently repeatable crash (complete DOS) of Oracle VM VirtualBox. CVSS 3.1 Base Score 7.1 (Integrity and Availability impacts).  CVSS Vector: (CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H).",
+  "translation": "none",
+  "severity": "high",
+  "cvssScore": 7.1,
+  "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H",
+  "os": [],
+  "languages": [],
+  "products": [],
+  "packages": [],
+  "sources": [
+    "nvd"
+  ],
+  "links": [
+    {
+      "kind": "detail",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-127422",
+      "host": "nvd.nist.gov",
+      "label": "NVD CVE-2026-127422"
+    },
+    {
+      "kind": "reference",
+      "url": "https://www.oracle.com/security-alerts/cspunov2026.html",
+      "host": "www.oracle.com",
+      "label": "www.oracle.com"
+    }
+  ],
+  "publishedAt": "2026-11-17T22:19:07.677Z",
+  "updatedAt": "2026-11-17T22:19:07.677Z",
+  "firstSeenAt": "2026-11-18T04:00:41.687Z",
+  "week": "2026-W47"
+}
+---
+
+# Vulnerability in the Oracle VM VirtualBox product of Oracle Virtualization \(component\: Core\)\.
+
+- **ID**: CVE\-2026\-127422
+- **危険度**: High（重要） (CVSS 7.1)
+- **公開**: 2026-11-17
+
+## 原文
+
+Vulnerability in the Oracle VM VirtualBox product of Oracle Virtualization \(component\: Core\)\.   The supported version that is affected is 7\.2\.22\. Easily exploitable vulnerability allows unauthenticated attacker with logon to the infrastructure where Oracle VM VirtualBox executes to compromise Oracle VM VirtualBox\.  Successful attacks require human interaction from a person other than the attacker\. Successful attacks of this vulnerability can result in  unauthorized creation, deletion or modification access to critical data or all Oracle VM VirtualBox accessible data and unauthorized ability to cause a hang or frequently repeatable crash \(complete DOS\) of Oracle VM VirtualBox\. CVSS 3\.1 Base Score 7\.1 \(Integrity and Availability impacts\)\.  CVSS Vector\: \(CVSS\:3\.1/AV\:L/AC\:L/PR\:N/UI\:R/S\:U/C\:N/I\:H/A\:H\)\.
+
+## リンク
+
+- [NVD CVE\-2026\-127422](<https://nvd.nist.gov/vuln/detail/CVE-2026-127422>)
+- [www\.oracle\.com](<https://www.oracle.com/security-alerts/cspunov2026.html>)

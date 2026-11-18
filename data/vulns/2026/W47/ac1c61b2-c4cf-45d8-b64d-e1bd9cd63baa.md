@@ -1,0 +1,57 @@
+---
+{
+  "uuid": "ac1c61b2-c4cf-45d8-b64d-e1bd9cd63baa",
+  "ids": [
+    "CVE-2026-103420"
+  ],
+  "title": "Joomla Extension - php-web-design.com - CSRF for various actions in StageIt 1.0.0-2.2.0, 3.0.0-4.2.0, 5.0.0-5.7.5, 6.0.0-6.3.5",
+  "summary": "Joomla Extension - php-web-design.com - CSRF for various actions in StageIt 1.0.0-2.2.0, 3.0.0-4.2.0, 5.0.0-5.7.5, 6.0.0-6.3.5",
+  "translation": "none",
+  "severity": "high",
+  "cvssScore": 7.2,
+  "cvssVector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:N/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+  "os": [],
+  "languages": [
+    "PHP"
+  ],
+  "products": [],
+  "packages": [],
+  "sources": [
+    "nvd"
+  ],
+  "links": [
+    {
+      "kind": "detail",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-103420",
+      "host": "nvd.nist.gov",
+      "label": "NVD CVE-2026-103420"
+    },
+    {
+      "kind": "reference",
+      "url": "https://www.php-web-design.com/Information/stageit-6-changelog.html",
+      "host": "www.php-web-design.com",
+      "label": "www.php-web-design.com"
+    }
+  ],
+  "publishedAt": "2026-11-02T14:17:34.363Z",
+  "updatedAt": "2026-11-17T09:17:25.613Z",
+  "firstSeenAt": "2026-11-18T04:00:41.687Z",
+  "week": "2026-W47"
+}
+---
+
+# Joomla Extension \- php\-web\-design\.com \- CSRF for various actions in StageIt 1\.0\.0\-2\.2\.0, 3\.0\.0\-4\.2\.0, 5\.0\.0\-5\.7\.5, 6\.0\.0\-6\.3\.5
+
+- **ID**: CVE\-2026\-103420
+- **危険度**: High（重要） (CVSS 7.2)
+- **言語**: PHP
+- **公開**: 2026-11-02
+
+## 原文
+
+Joomla Extension \- php\-web\-design\.com \- CSRF for various actions in StageIt 1\.0\.0\-2\.2\.0, 3\.0\.0\-4\.2\.0, 5\.0\.0\-5\.7\.5, 6\.0\.0\-6\.3\.5
+
+## リンク
+
+- [NVD CVE\-2026\-103420](<https://nvd.nist.gov/vuln/detail/CVE-2026-103420>)
+- [www\.php\-web\-design\.com](<https://www.php-web-design.com/Information/stageit-6-changelog.html>)

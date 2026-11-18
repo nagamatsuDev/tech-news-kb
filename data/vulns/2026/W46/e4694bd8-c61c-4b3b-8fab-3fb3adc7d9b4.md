@@ -14,18 +14,14 @@
   "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
   "os": [],
   "languages": [],
-  "products": [],
+  "products": [
+    "open-emr openemr"
+  ],
   "packages": [],
   "sources": [
     "nvd"
   ],
   "links": [
-    {
-      "kind": "vendor",
-      "url": "https://github.com/openemr/openemr/security/advisories/GHSA-3vxh-7hh5-vhhm",
-      "host": "github.com",
-      "label": "ベンダー発表 (github.com)"
-    },
     {
       "kind": "detail",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-126470",
@@ -40,7 +36,7 @@
     }
   ],
   "publishedAt": "2026-11-13T10:17:56.087Z",
-  "updatedAt": "2026-11-13T10:17:56.207Z",
+  "updatedAt": "2026-11-17T21:17:39.353Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W46"
 }
@@ -62,6 +58,5 @@ OpenEMR before 8\.5\.0 contains an insecure direct object reference vulnerabilit
 
 ## リンク
 
-- [ベンダー発表 \(github\.com\)](<https://github.com/openemr/openemr/security/advisories/GHSA-3vxh-7hh5-vhhm>)
 - [NVD CVE\-2026\-126470](<https://nvd.nist.gov/vuln/detail/CVE-2026-126470>)
 - [www\.vulncheck\.com](<https://www.vulncheck.com/advisories/openemr-before-8.5.0-idor-in-carecoordination-ccda-ccr-qrda-document-actions>)

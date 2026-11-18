@@ -14,7 +14,9 @@
   "languages": [
     "PHP"
   ],
-  "products": [],
+  "products": [
+    "open-emr openemr"
+  ],
   "packages": [],
   "sources": [
     "nvd"
@@ -40,7 +42,7 @@
     }
   ],
   "publishedAt": "2026-11-13T10:17:51.480Z",
-  "updatedAt": "2026-11-13T10:17:51.597Z",
+  "updatedAt": "2026-11-17T20:59:55.573Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W46"
 }
