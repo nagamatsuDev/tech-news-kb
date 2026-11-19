@@ -14,7 +14,9 @@
     "Windows"
   ],
   "languages": [],
-  "products": [],
+  "products": [
+    "google chrome"
+  ],
   "packages": [],
   "sources": [
     "nvd"
@@ -40,7 +42,7 @@
     }
   ],
   "publishedAt": "2026-11-17T21:17:50.133Z",
-  "updatedAt": "2026-11-17T22:19:10.887Z",
+  "updatedAt": "2026-11-18T19:14:34.177Z",
   "firstSeenAt": "2026-11-18T04:00:41.687Z",
   "week": "2026-W47"
 }
