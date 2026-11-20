@@ -80,13 +80,13 @@ export function applyKev(vulns: CollectedVuln[], kev: Map<string, KevInfo>): Col
   });
 }
 
-/** 優先度順（KEV → 危険度 → CVSS → 新しい順）に並べる */
+/** 危険度 → CVSS スコア（大きい順）→ KEV → 新しい順 に並べる */
 export function sortByPriority<T extends Pick<CollectedVuln, "kev" | "severity" | "cvssScore" | "publishedAt">>(vulns: T[]): T[] {
   return [...vulns].sort(
     (a, b) =>
-      Number(Boolean(b.kev)) - Number(Boolean(a.kev)) ||
       SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity] ||
       (b.cvssScore ?? 0) - (a.cvssScore ?? 0) ||
+      Number(Boolean(b.kev)) - Number(Boolean(a.kev)) ||
       b.publishedAt.localeCompare(a.publishedAt),
   );
 }

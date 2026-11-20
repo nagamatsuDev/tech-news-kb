@@ -9,6 +9,7 @@ import { SEVERITY_RANK, type Severity } from "../../../../src/types/vuln.js";
 import { safeUrl } from "../../../../src/shared/sanitize.js";
 import { indexDeps, matchVuln, type MatchInput, type MatchResult } from "./match.js";
 import { queryPast, type PastItem } from "./osv.js";
+import { createCopyButton } from "./copy.js";
 import {
   STATUSES,
   STATUS_LABEL,
@@ -92,12 +93,13 @@ function evaluate() {
   applyFilters();
 }
 
+/** 並び順: 危険度 → CVSS スコア（大きい順）→ 設定との一致度 → KEV */
 function rank(card: HTMLElement): number[] {
   return [
-    Number(card.dataset.level ?? 0),
-    card.dataset.kev ? 1 : 0,
     SEVERITY_RANK[(card.dataset.sev ?? "unknown") as Severity] ?? 0,
     Number(card.dataset.cvss ?? 0),
+    Number(card.dataset.level ?? 0),
+    card.dataset.kev ? 1 : 0,
   ];
 }
 
@@ -231,7 +233,7 @@ function renderPastItem(item: PastItem, status: Status, gone: boolean): HTMLElem
   const sev = item.severity in SEV_BADGE ? item.severity : "unknown";
   top.append(el("span", `rounded px-1.5 py-0.5 text-xs font-semibold ${SEV_BADGE[sev]}`, `${sev === "unknown" ? "未評価" : sev[0].toUpperCase() + sev.slice(1)}${item.cvssScore ? ` ${item.cvssScore.toFixed(1)}` : ""}`));
   top.append(el("span", gone ? "rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600" : "rounded bg-red-600 px-1.5 py-0.5 text-xs font-semibold text-white", gone ? "依存から外れた" : "依存に該当"));
-  top.append(el("span", "font-mono text-xs text-gray-500", item.ids[0] ?? ""));
+  if (item.ids[0]) top.append(createCopyButton(item.ids[0]));
   if (item.published) top.append(el("span", "ml-auto text-xs text-gray-400", item.published.slice(0, 10)));
   card.append(top);
   card.append(el("p", "mt-1.5 font-medium text-gray-900", item.title));
@@ -317,6 +319,7 @@ async function renderPast(refetch: boolean, force = false) {
     if (status === "done" && !showDone) continue;
     rows.push({ item, status, gone: !current.has(uuid) });
   }
+  // 危険度 → CVSS（大きい順）。依存から外れたものは最後
   rows.sort(
     (a, b) =>
       Number(a.gone) - Number(b.gone) ||
