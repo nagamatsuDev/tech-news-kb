@@ -73,6 +73,14 @@ const columns = [
       <label class="flex items-center gap-1 font-medium text-gray-700">
         <input id="f-matched" type="checkbox" class="rounded border-gray-300" /> 設定に一致のみ
       </label>
+      <!-- 依存ファイルを読み込んでいるときだけ表示（board-ui.ts） -->
+      <label
+        id="f-deps-wrap"
+        class="hidden flex items-center gap-1 font-medium text-gray-700"
+        title="言語の設定だけで一致し、読み込んだ依存ファイルに対象パッケージが無いものを隠します"
+      >
+        <input id="f-deps" type="checkbox" class="rounded border-gray-300" /> 言語の一致は依存ファイルにあるもののみ<span id="f-deps-count" class="font-normal text-gray-400"></span>
+      </label>
       <span class="mx-1 h-4 w-px bg-gray-200"></span>
       {SEVERITIES.map((s) => (
         <button type="button" data-sev-filter={s} class="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-gray-700">

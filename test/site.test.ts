@@ -122,6 +122,32 @@ test("照合: 依存 > 製品・言語 > OS", () => {
   assert.equal(matchVuln({ ...base, title: "a (b" }, { ...settings, products: ["(b"] }, deps).level, 2);
 });
 
+test("照合: 言語だけの一致で依存ファイルに無いもの（languageOnly）", () => {
+  // package-lock.json（npm）だけ読み込んだ状態
+  const deps = indexDeps([{ ecosystem: "npm", name: "next", version: "15.1.0", approximate: false, dev: false, manifest: "package-lock.json" }]);
+  const settings = { os: [], languages: ["JavaScript/TypeScript", "Python"], products: ["nginx"] };
+  const base = { os: [], languages: [] as string[], products: [], title: "", packages: [] as any[] };
+  const js = { ...base, languages: ["JavaScript/TypeScript"] };
+
+  // 対象パッケージが依存に無い → 隠す対象
+  const other = matchVuln({ ...js, packages: [{ ecosystem: "npm", name: "lodash", vulnerableRange: "< 4.17.21" }] }, settings, deps);
+  assert.equal(other.level, 2);
+  assert.equal(other.languageOnly, true);
+  // パッケージ情報が無い（NVD のみ）ものも、依存で確かめられないので隠す対象
+  assert.equal(matchVuln(js, settings, deps).languageOnly, true);
+
+  // 依存にある（修正済みバージョンでも）→ 隠さない
+  assert.equal(matchVuln({ ...js, packages: [{ ecosystem: "npm", name: "next", vulnerableRange: "< 15.0.0" }] }, settings, deps).languageOnly, false);
+  // 依存に該当 → 隠さない
+  assert.equal(matchVuln({ ...js, packages: [{ ecosystem: "npm", name: "next", vulnerableRange: "< 15.2.3" }] }, settings, deps).languageOnly, false);
+  // 製品名でも一致 → 隠さない
+  assert.equal(matchVuln({ ...js, title: "nginx module for node" }, settings, deps).languageOnly, false);
+  // Python の依存ファイルは読み込んでいない → 確かめられないので隠さない
+  assert.equal(matchVuln({ ...base, languages: ["Python"] }, settings, deps).languageOnly, false);
+  // 依存ファイルを何も読み込んでいない → 隠さない
+  assert.equal(matchVuln(js, settings, indexDeps([])).languageOnly, false);
+});
+
 test("依存ファイル名の判定", () => {
   assert.equal(manifestType("package-lock (1).json"), "package-lock.json");
   assert.equal(manifestType("package.json"), "package.json");

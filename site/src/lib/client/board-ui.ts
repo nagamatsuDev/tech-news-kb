@@ -36,7 +36,8 @@ const LEVEL_STYLE: Record<number, { card: string[]; badge: string[]; label: stri
 };
 const ALL_LEVEL_CLASSES = Object.values(LEVEL_STYLE).flatMap((s) => [...s.card, ...s.badge]);
 
-const filters = { matchedOnly: false, kevOnly: false, sev: new Set<string>(), q: "" };
+/** depsOnly: 言語だけの一致で、読み込んだ依存ファイルに対象パッケージが無いものを隠す */
+const filters = { matchedOnly: false, depsOnly: false, kevOnly: false, sev: new Set<string>(), q: "" };
 
 function parseMatch(card: HTMLElement): MatchInput | undefined {
   try {
@@ -52,16 +53,20 @@ function parseMatch(card: HTMLElement): MatchInput | undefined {
 
 function evaluate() {
   const settings = loadSettings();
-  const depIndex = indexDeps(loadDeps().deps);
+  const deps = loadDeps().deps;
+  const depIndex = indexDeps(deps);
   const statuses = loadStatuses();
   const hits = loadDepHits();
   const newHits: string[] = [];
+  let langOnlyCount = 0;
 
   for (const card of cards()) {
     const uuid = card.dataset.uuid!;
     const input = parseMatch(card);
-    const m: MatchResult = input ? matchVuln(input, settings, depIndex) : { level: 0, reasons: [], deps: [] };
+    const m: MatchResult = input ? matchVuln(input, settings, depIndex) : { level: 0, reasons: [], deps: [], languageOnly: false };
     card.dataset.level = String(m.level);
+    card.dataset.langOnly = m.languageOnly ? "1" : "";
+    if (m.languageOnly) langOnlyCount++;
     if (m.level === 3) newHits.push(uuid);
 
     card.classList.remove(...ALL_LEVEL_CLASSES);
@@ -89,6 +94,7 @@ function evaluate() {
     if (col && card.parentElement !== col) col.appendChild(card);
   }
   recordDepHits(newHits);
+  updateDepsFilter(deps.length > 0, langOnlyCount);
   sortColumns();
   applyFilters();
 }
@@ -124,6 +130,7 @@ function applyFilters() {
   for (const card of cards()) {
     const ok =
       (!filters.matchedOnly || Number(card.dataset.level) > 0) &&
+      (!filters.depsOnly || card.dataset.langOnly !== "1") &&
       (!filters.kevOnly || card.dataset.kev === "1") &&
       (filters.sev.size === 0 || filters.sev.has(card.dataset.sev ?? "")) &&
       (!q || (card.dataset.text ?? "").includes(q));
@@ -135,6 +142,19 @@ function applyFilters() {
     const el = document.querySelector(`[data-column="${s}"] .column-count`);
     if (el) el.textContent = String(counts[s]);
   }
+}
+
+/** 依存ファイルを読み込んでいるときだけ「依存ファイルで絞り込む」を出す。読み込んでいなければ無効にする */
+function updateDepsFilter(hasDeps: boolean, hidden: number) {
+  const wrap = document.getElementById("f-deps-wrap");
+  const box = document.getElementById("f-deps") as HTMLInputElement | null;
+  const count = document.getElementById("f-deps-count");
+  wrap?.classList.toggle("hidden", !hasDeps);
+  if (!hasDeps && box) {
+    box.checked = false;
+    filters.depsOnly = false;
+  }
+  if (count) count.textContent = `（${hidden} 件）`;
 }
 
 function move(card: HTMLElement, status: Status) {
@@ -181,6 +201,7 @@ function initBoard() {
   // 絞り込み
   const byId = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   byId<HTMLInputElement>("f-matched")?.addEventListener("change", (e) => ((filters.matchedOnly = (e.target as HTMLInputElement).checked), applyFilters()));
+  byId<HTMLInputElement>("f-deps")?.addEventListener("change", (e) => ((filters.depsOnly = (e.target as HTMLInputElement).checked), applyFilters()));
   byId<HTMLInputElement>("f-kev")?.addEventListener("change", (e) => ((filters.kevOnly = (e.target as HTMLInputElement).checked), applyFilters()));
   byId<HTMLInputElement>("f-q")?.addEventListener("input", (e) => ((filters.q = (e.target as HTMLInputElement).value), applyFilters()));
   document.querySelectorAll<HTMLButtonElement>("[data-sev-filter]").forEach((b) =>

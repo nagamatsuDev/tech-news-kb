@@ -9,6 +9,11 @@ export default defineConfig({
 
   integrations: [tailwind()],
 
+  // 開発ツールバーはインラインスクリプトでデータを渡すため、Base.astro の CSP（script-src 'self'）で
+  // ブロックされて "Cannot read properties of undefined (reading 'latestAstroVersion')" になる。
+  // CSP を緩めずに済むよう無効にする（本番ビルドには元々含まれない）
+  devToolbar: { enabled: false },
+
   // data/ ディレクトリを public として扱う（index.json を直接配信）
   // ビルド時にコピーされる
   publicDir: "../data",

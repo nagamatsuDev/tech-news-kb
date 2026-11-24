@@ -1,7 +1,28 @@
+# 依存パッケージ
 node_modules/
+site/node_modules/
+
+# ビルド成果物
 dist/
 site/dist/
-site/node_modules/
+*.tsbuildinfo
+
+# Astro が自動生成する型定義・設定（astro dev / build / sync で毎回作り直される）
+.astro/
+
+# 機械翻訳モデルのキャッシュ
+.hf-cache/
+
+# ログ
+*.log
+npm-debug.log*
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
+
+# 環境変数・ローカル設定
 .env
 *.local
-.hf-cache/
+
+# ※ data/ は収集結果（Actions が自動コミットし、サイトのビルドで使う）なので除外しない
