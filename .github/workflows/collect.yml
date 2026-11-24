@@ -1,7 +1,8 @@
 # 脆弱性収集 + GitHub Pages デプロイ ワークフロー
 #
-# スケジュール: 毎朝 JST 8:00 (UTC 23:00) に自動実行
-# 手動実行:    GitHub の Actions タブから "Run workflow" で任意のタイミングで実行可能
+# スケジュール: 毎朝 JST 8:00 (UTC 23:00) に自動実行（収集 → デプロイ）
+# push:        main ブランチへの push でサイトだけ再ビルド・デプロイ（収集はスキップ）
+# 手動実行:    GitHub の Actions タブから "Run workflow" で任意のタイミングで実行可能（収集 → デプロイ）
 #
 # Secrets（Settings > Secrets and variables > Actions）— どれも任意:
 #   - NVD_API_KEY    : NVD API キー（https://nvd.nist.gov/developers/request-an-api-key）。あると取得が速く安定する
@@ -16,8 +17,17 @@ on:
   schedule:
     # UTC 23:00 = JST 08:00
     - cron: "0 23 * * *"
+  # main への push でサイトを再デプロイ
+  # （Actions 自身の自動コミットは GITHUB_TOKEN で push されるため、ここは再発火しない）
+  push:
+    branches: [main]
   # 手動トリガー（テスト・緊急実行用）
   workflow_dispatch:
+
+# 同時に複数のデプロイが走らないようにする（実行中のものは途中で止めない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 # GitHub Pages へのデプロイに必要な権限
 permissions:
@@ -31,6 +41,8 @@ jobs:
   # ----------------------------------------------------------------
   collect:
     name: Collect vulnerabilities
+    # push 時は収集せず、デプロイだけ行う
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
 
     steps:
@@ -76,20 +88,19 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
           git commit -m "chore: collect vulnerabilities $(date +'%Y-%m-%d')"
+          # 収集中に main へ push があっても失敗しないよう、最新を取り込んでから push する
+          git pull --rebase
           git push
 
   # ----------------------------------------------------------------
-  # Job 2: Astro ビルド → GitHub Pages デプロイ
-  # collect ジョブが成功した後に実行する
+  # Job 2: Astro ビルド → Pages 用アーティファクトのアップロード
+  # collect ジョブが成功した後（push 時は collect がスキップされた後）に実行する
   # ----------------------------------------------------------------
-  deploy:
-    name: Build and deploy site
+  build:
+    name: Build site
     needs: collect
+    if: ${{ !cancelled() && (needs.collect.result == 'success' || needs.collect.result == 'skipped') }}
     runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout repository
@@ -117,6 +128,22 @@ jobs:
         with:
           path: site/dist
 
+  # ----------------------------------------------------------------
+  # Job 3: GitHub Pages へデプロイ
+  # アップロードと同じジョブでデプロイすると、アーティファクトが一覧に
+  # 反映される前に探しに行って "No artifacts named github-pages" で
+  # 失敗することがあるため、ジョブを分ける（GitHub 公式テンプレートと同じ構成）
+  # ----------------------------------------------------------------
+  deploy:
+    name: Deploy site
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

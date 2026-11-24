@@ -1,0 +1,25 @@
+---
+/**
+ * トップ: 今週のページへ移動する
+ * ビルド時点の最新週へ静的にリダイレクト（日付が変わってビルド前でも、最新のデータの週が開く）
+ */
+import { allWeeks } from "../lib/vulns";
+
+const weeks = allWeeks();
+const latest = weeks[weeks.length - 1];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const target = `${base}/weeks/${latest}`;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Vuln KB</title>
+  </head>
+  <body>
+    <p><a href={target}>今週の脆弱性（{latest}）へ</a></p>
+  </body>
+</html>

@@ -61,7 +61,8 @@ npm test          # テスト（ネットワーク不要）
 npm run dev:site  # サイトをローカルで確認
 ```
 
-GitHub Actions（`.github/workflows/collect.yml`）が毎朝 JST 8:00 に実行します。
+GitHub Actions（`.github/workflows/collect.yml`）が毎朝 JST 8:00 に収集 → サイトのデプロイを実行します。
+`main` へ push したときは収集をせず、サイトのビルド・デプロイだけを行います。
 
 | Secret（任意） | 用途 |
 |---|---|
@@ -92,9 +93,3 @@ site/src/
 ├── layouts/Base.astro        # ヘッダー・設定ダイアログ・CSP
 └── lib/client/               # storage / match / osv / board-ui / settings-ui
 ```
-
-### 削除してよい旧ファイル
-
-旧ニュース収集（`npm run collect:news`）: `src/news-main.ts`, `src/fetchers/{rss,hackernews,github}.ts`, `src/processors/{dedup,tagger}.ts`, `src/writers/markdown.ts`, `src/config/{sources,tags}.ts`, `site/src/pages/tags/`, `site/src/components/ArticleCard.astro`
-
-旧タスク機能（ブラウザ内の照合に置き換え済み）: `src/projects/{loader,tasks}.ts`, `src/fetchers/osv.ts`, `src/writers/vulns.ts`, `src/config/projects.ts`, `site/src/pages/tasks.astro`, `site/src/components/TaskItem.astro`（削除したら `tsconfig.json` の `exclude` からも外す）

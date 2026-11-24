@@ -25,11 +25,6 @@
   "exclude": [
     "node_modules",
     "dist",
-    "site",
-    "src/projects/loader.ts",
-    "src/projects/tasks.ts",
-    "src/fetchers/osv.ts",
-    "src/writers/vulns.ts",
-    "src/config/projects.ts"
+    "site"
   ]
 }
