@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-20T03:54:18.029Z",
+  "updatedAt": "2026-11-24T09:52:32.225Z",
   "weeks": [
     {
       "week": "2026-W45",
@@ -10,17 +10,24 @@
     },
     {
       "week": "2026-W46",
-      "count": 1430,
-      "critical": 185,
-      "high": 1218,
+      "count": 1509,
+      "critical": 190,
+      "high": 1292,
       "kev": 1
     },
     {
       "week": "2026-W47",
-      "count": 1600,
-      "critical": 295,
-      "high": 1223,
-      "kev": 8
+      "count": 2098,
+      "critical": 357,
+      "high": 1642,
+      "kev": 11
+    },
+    {
+      "week": "2026-W48",
+      "count": 301,
+      "critical": 46,
+      "high": 251,
+      "kev": 3
     }
   ]
 }

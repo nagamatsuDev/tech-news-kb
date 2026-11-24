@@ -20,6 +20,12 @@
   "links": [
     {
       "kind": "vendor",
+      "url": "https://access.redhat.com/errata/RHSA-2026:100677",
+      "host": "access.redhat.com",
+      "label": "ベンダー発表 (access.redhat.com)"
+    },
+    {
+      "kind": "vendor",
       "url": "https://access.redhat.com/errata/RHSA-2026:98532",
       "host": "access.redhat.com",
       "label": "ベンダー発表 (access.redhat.com)"
@@ -27,12 +33,6 @@
     {
       "kind": "vendor",
       "url": "https://access.redhat.com/errata/RHSA-2026:99154",
-      "host": "access.redhat.com",
-      "label": "ベンダー発表 (access.redhat.com)"
-    },
-    {
-      "kind": "vendor",
-      "url": "https://access.redhat.com/security/cve/CVE-2026-119528",
       "host": "access.redhat.com",
       "label": "ベンダー発表 (access.redhat.com)"
     },
@@ -56,7 +56,7 @@
     }
   ],
   "publishedAt": "2026-10-30T14:16:45.143Z",
-  "updatedAt": "2026-11-13T18:17:27.267Z",
+  "updatedAt": "2026-11-23T15:17:26.723Z",
   "firstSeenAt": "2026-11-16T07:24:38.436Z",
   "week": "2026-W47"
 }
@@ -74,9 +74,9 @@ A flaw was found in GIMP\. The PSD plug\-in’s image resource header loader use
 
 ## リンク
 
+- [ベンダー発表 \(access\.redhat\.com\)](<https://access.redhat.com/errata/RHSA-2026:100677>)
 - [ベンダー発表 \(access\.redhat\.com\)](<https://access.redhat.com/errata/RHSA-2026:98532>)
 - [ベンダー発表 \(access\.redhat\.com\)](<https://access.redhat.com/errata/RHSA-2026:99154>)
-- [ベンダー発表 \(access\.redhat\.com\)](<https://access.redhat.com/security/cve/CVE-2026-119528>)
 - [NVD CVE\-2026\-119528](<https://nvd.nist.gov/vuln/detail/CVE-2026-119528>)
 - [bugzilla\.redhat\.com](<https://bugzilla.redhat.com/show_bug.cgi?id=2563900>)
 - [gitlab\.gnome\.org](<https://gitlab.gnome.org/GNOME/gimp/-/work_items/16799>)
