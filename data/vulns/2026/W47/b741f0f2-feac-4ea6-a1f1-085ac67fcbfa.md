@@ -12,7 +12,9 @@
   "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
   "os": [],
   "languages": [],
-  "products": [],
+  "products": [
+    "google chrome"
+  ],
   "packages": [],
   "sources": [
     "nvd"
@@ -38,7 +40,7 @@
     }
   ],
   "publishedAt": "2026-11-17T21:17:45.357Z",
-  "updatedAt": "2026-11-18T21:17:51.260Z",
+  "updatedAt": "2026-11-23T15:25:23.587Z",
   "firstSeenAt": "2026-11-19T03:57:45.838Z",
   "week": "2026-W47"
 }
