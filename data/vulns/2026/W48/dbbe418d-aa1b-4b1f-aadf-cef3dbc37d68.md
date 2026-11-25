@@ -12,7 +12,9 @@
   "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
   "os": [],
   "languages": [],
-  "products": [],
+  "products": [
+    "ffmpeg ffmpeg"
+  ],
   "packages": [],
   "sources": [
     "nvd"
@@ -26,15 +28,15 @@
     },
     {
       "kind": "patch",
+      "url": "https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/26121",
+      "host": "code.ffmpeg.org",
+      "label": "修正 (code.ffmpeg.org)"
+    },
+    {
+      "kind": "patch",
       "url": "https://github.com/FFmpeg/FFmpeg/commit/04955e8b148fa3e7ab022cbb9f5e35c49165ae21",
       "host": "github.com",
       "label": "修正 (github.com)"
-    },
-    {
-      "kind": "reference",
-      "url": "https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/26121",
-      "host": "code.ffmpeg.org",
-      "label": "code.ffmpeg.org"
     },
     {
       "kind": "reference",
@@ -56,7 +58,7 @@
     }
   ],
   "publishedAt": "2026-11-24T04:17:32.827Z",
-  "updatedAt": "2026-11-24T04:17:32.947Z",
+  "updatedAt": "2026-11-24T17:23:21.687Z",
   "firstSeenAt": "2026-11-24T09:50:50.375Z",
   "week": "2026-W48"
 }
@@ -75,8 +77,8 @@ FFmpeg before 9\.1 contains a heap out\-of\-bounds write vulnerability in libavf
 ## リンク
 
 - [NVD CVE\-2026\-135738](<https://nvd.nist.gov/vuln/detail/CVE-2026-135738>)
+- [修正 \(code\.ffmpeg\.org\)](<https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/26121>)
 - [修正 \(github\.com\)](<https://github.com/FFmpeg/FFmpeg/commit/04955e8b148fa3e7ab022cbb9f5e35c49165ae21>)
-- [code\.ffmpeg\.org](<https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/26121>)
 - [github\.com](<https://github.com/FFmpeg/FFmpeg>)
 - [github\.com](<https://github.com/FFmpeg/FFmpeg/blob/n9.0.2/libavfilter/vf_signalstats.c#L620>)
 - [www\.vulncheck\.com](<https://www.vulncheck.com/advisories/ffmpeg-before-9.1-heap-out-of-bounds-write-via-signalstats-filter-histograms>)
